@@ -10,6 +10,7 @@ fs.readFile("./restaurants.json", (err, data) => {
 	try {
 		db.serialize(() => {
 			let result = JSON.parse(data);
+			let counter = 1;
 			for (let i = 0; i < result.length; i++) {
 				const restaurant = result[i];
 				db.run(
@@ -25,11 +26,10 @@ fs.readFile("./restaurants.json", (err, data) => {
 					for (let k = 0; k < menu.items.length; k++) {
 						const menuItem = menu.items[k];
 						db.run(
-							`INSERT INTO MenuItem (MenuId, Name, Price) VALUES ('${i + 1}','${
-								menuItem.name
-							}', '${menuItem.price}')`
+							`INSERT INTO MenuItem (MenuId, Name, Price) VALUES ('${counter}','${menuItem.name}', '${menuItem.price}')`
 						);
 					}
+					counter++;
 				}
 			}
 		});
